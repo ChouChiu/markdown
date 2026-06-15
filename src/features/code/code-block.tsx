@@ -2,8 +2,8 @@
 
 import { Icon } from "@iconify/react";
 import { Check, Copy } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 export function CodeBlock({

@@ -1,6 +1,6 @@
-import type { Components } from "react-markdown";
 import { createElement } from "react";
-import { extractText, stripNode, slugify } from "../../shared/utils";
+import type { Components } from "react-markdown";
+import { extractText, slugify, stripNode } from "../../shared/utils";
 
 const slugCounters = new Map<string, number>();
 

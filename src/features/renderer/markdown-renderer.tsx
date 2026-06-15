@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import type { CSSProperties } from "react";
+import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { rehypeGithubAlerts } from "rehype-github-alerts";
@@ -42,19 +42,16 @@ export function MarkdownRenderer({
 		[],
 	);
 
-	const components = useMemo(
-		() => {
-			resetSlugCounters();
-			return {
-				...makeHeadingComponents(),
-				...makeCodeComponents(theme),
-				...makeLinkComponent(),
-				...makeTableComponent(),
-				...makeCheckboxComponent(),
-			};
-		},
-		[theme],
-	);
+	const components = useMemo(() => {
+		resetSlugCounters();
+		return {
+			...makeHeadingComponents(),
+			...makeCodeComponents(theme),
+			...makeLinkComponent(),
+			...makeTableComponent(),
+			...makeCheckboxComponent(),
+		};
+	}, [theme]);
 
 	return (
 		<div className="blog-module">
