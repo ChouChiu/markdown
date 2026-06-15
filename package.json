@@ -1,6 +1,6 @@
 {
   "name": "@chouchiu/markdown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Markdown renderer — GFM, syntax highlighting, GitHub Alerts, math",
   "type": "module",
   "main": "./dist/index.js",
