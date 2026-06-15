@@ -1,0 +1,77 @@
+{
+  "name": "@chouchiu/markdown",
+  "version": "1.0.0",
+  "description": "React Markdown renderer — GFM, syntax highlighting, GitHub Alerts, math",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles/markdown.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "dist/styles/markdown.css"
+  ],
+  "scripts": {
+    "build": "bun run build:js && bun run build:types && bun run build:css",
+    "prepublishOnly": "bun run build",
+    "build:js": "tsup",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build:css": "mkdir -p dist/styles && cp src/styles/markdown.css dist/styles/markdown.css",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check ./src",
+    "format": "biome format ./src --write"
+  },
+  "peerDependencies": {
+    "katex": "^0.16.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "peerDependenciesMeta": {
+    "katex": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@iconify/react": "^6.0.2",
+    "lucide-react": "^1.18.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "rehype-github-alerts": "^4.2.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-emoji": "^5.0.2",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "keywords": [
+    "markdown",
+    "react",
+    "gfm",
+    "syntax-highlighting",
+    "katex",
+    "math",
+    "renderer"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChouChiu/markdown"
+  }
+}

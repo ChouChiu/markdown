@@ -1,0 +1,1 @@
+export { makeLinkComponent } from "./link";

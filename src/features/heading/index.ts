@@ -1,0 +1,1 @@
+export { makeHeadingComponents } from "./heading";

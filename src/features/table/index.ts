@@ -1,0 +1,1 @@
+export { makeTableComponent } from "./table";
