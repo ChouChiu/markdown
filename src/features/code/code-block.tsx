@@ -19,10 +19,14 @@ export function CodeBlock({
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const handleCopy = useCallback(async () => {
-		await navigator.clipboard.writeText(codeString);
-		setCopied(true);
-		if (timerRef.current) clearTimeout(timerRef.current);
-		timerRef.current = setTimeout(() => setCopied(false), 2000);
+		try {
+			await navigator.clipboard.writeText(codeString);
+			setCopied(true);
+			if (timerRef.current) clearTimeout(timerRef.current);
+			timerRef.current = setTimeout(() => setCopied(false), 2000);
+		} catch {
+			// Clipboard API unavailable (non-secure context, iframe, etc.)
+		}
 	}, [codeString]);
 
 	useEffect(() => {

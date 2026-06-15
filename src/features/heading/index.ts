@@ -1,1 +1,1 @@
-export { makeHeadingComponents } from "./heading";
+export { makeHeadingComponents, resetSlugCounters } from "./heading";

@@ -13,7 +13,7 @@ import remarkMath from "remark-math";
 
 import { makeCheckboxComponent } from "../checkbox";
 import { makeCodeComponents } from "../code";
-import { makeHeadingComponents } from "../heading";
+import { makeHeadingComponents, resetSlugCounters } from "../heading";
 import { makeLinkComponent } from "../link";
 import { makeTableComponent } from "../table";
 
@@ -43,13 +43,16 @@ export function MarkdownRenderer({
 	);
 
 	const components = useMemo(
-		() => ({
-			...makeHeadingComponents(),
-			...makeCodeComponents(theme),
-			...makeLinkComponent(),
-			...makeTableComponent(),
-			...makeCheckboxComponent(),
-		}),
+		() => {
+			resetSlugCounters();
+			return {
+				...makeHeadingComponents(),
+				...makeCodeComponents(theme),
+				...makeLinkComponent(),
+				...makeTableComponent(),
+				...makeCheckboxComponent(),
+			};
+		},
 		[theme],
 	);
 

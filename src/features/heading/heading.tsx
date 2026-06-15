@@ -2,6 +2,23 @@ import type { Components } from "react-markdown";
 import { createElement } from "react";
 import { extractText, stripNode, slugify } from "../../shared/utils";
 
+const slugCounters = new Map<string, number>();
+
+export function resetSlugCounters(): void {
+	slugCounters.clear();
+}
+
+function uniqueSlug(text: string): string {
+	const base = slugify(text);
+	const count = slugCounters.get(base);
+	if (count === undefined) {
+		slugCounters.set(base, 1);
+		return base;
+	}
+	slugCounters.set(base, count + 1);
+	return `${base}-${count}`;
+}
+
 /**
  * Create heading components (h1–h6) that auto-generate an id from the text content.
  * This replaces the six near-identical handler blocks.
@@ -18,7 +35,7 @@ export function makeHeadingComponents(): Pick<
 		}: React.HTMLAttributes<HTMLElement> & { node?: unknown }) {
 			const cleanProps = stripNode(props);
 			const text = extractText(children);
-			const id = slugify(text);
+			const id = uniqueSlug(text);
 			return createElement(tag, { id, ...cleanProps }, children);
 		};
 	}
