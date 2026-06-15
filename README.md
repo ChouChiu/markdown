@@ -34,11 +34,40 @@ export default function Page() {
 |---|---|---|---|
 | `content` | `string` | required | Raw markdown to render. |
 | `theme` | `Record<string, CSSProperties>` | `nightOwl` | Prism theme. Import from `react-syntax-highlighter/dist/esm/styles/prism`. |
+| `components` | `Components` | — | Custom element overrides (react-markdown `Components`). Merged: user values win over built-in defaults. |
 
 ```tsx
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 
 <MarkdownRenderer content={md} theme={oneDark} />
+```
+
+### Custom components
+
+Override any HTML element rendered by react-markdown. User components take priority over the built-in ones.
+
+```tsx
+import type { Components } from "react-markdown"
+
+const custom: Components = {
+  // Replace <div> with your own wrapper
+  div: ({ children, ...props }) => (
+    <div {...props} className="my-custom-div">{children}</div>
+  ),
+  // Keep the built-in heading logic but add extra attributes
+  h2: ({ children, ...props }) => (
+    <h2 {...props} data-toc>{children}</h2>
+  ),
+  // Inject a contribution card after every <code> block
+  code: ({ children, ...props }) => (
+    <>
+      <code {...props}>{children}</code>
+      <GitHubContributions />
+    </>
+  ),
+}
+
+<MarkdownRenderer content={md} components={custom} />
 ```
 
 ### `<CodeBlock />`

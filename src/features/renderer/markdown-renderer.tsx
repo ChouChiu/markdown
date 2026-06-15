@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useMemo } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { rehypeGithubAlerts } from "rehype-github-alerts";
 import rehypeKatex from "rehype-katex";
@@ -30,11 +30,18 @@ export interface MarkdownRendererProps {
 	 * @default nightOwl
 	 */
 	theme?: { [key: string]: CSSProperties };
+	/**
+	 * Custom component overrides for any HTML element rendered by react-markdown.
+	 * User-provided components take precedence over internal defaults.
+	 * Use to inject custom rendering for elements like `div`, `code`, `a`, etc.
+	 */
+	components?: Components;
 }
 
 export function MarkdownRenderer({
 	content,
 	theme = nightOwl,
+	components: userComponents,
 }: MarkdownRendererProps) {
 	const remarkPlugins = useMemo(() => [remarkGfm, remarkEmoji, remarkMath], []);
 	const rehypePlugins = useMemo(
@@ -44,14 +51,15 @@ export function MarkdownRenderer({
 
 	const components = useMemo(() => {
 		resetSlugCounters();
-		return {
+		const defaults: Components = {
 			...makeHeadingComponents(),
 			...makeCodeComponents(theme),
 			...makeLinkComponent(),
 			...makeTableComponent(),
 			...makeCheckboxComponent(),
 		};
-	}, [theme]);
+		return { ...defaults, ...userComponents };
+	}, [theme, userComponents]);
 
 	return (
 		<div className="blog-module">
