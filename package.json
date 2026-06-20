@@ -1,6 +1,6 @@
 {
   "name": "@chouchiu/markdown",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Framework-agnostic Markdown renderer — GFM, syntax highlighting, GitHub Alerts, math. Ships rehype plugins (Astro, VitePress, unified) + React components.",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,13 +14,13 @@
     },
     "./plugins": {
       "types": "./dist/plugins/index.d.ts",
-      "import": "./dist/plugins/index.js",
-      "require": "./dist/plugins/index.cjs"
+      "import": "./dist/plugins.js",
+      "require": "./dist/plugins.cjs"
     },
     "./elements": {
       "types": "./dist/elements/index.d.ts",
-      "import": "./dist/elements/index.js",
-      "require": "./dist/elements/index.cjs"
+      "import": "./dist/elements.js",
+      "require": "./dist/elements.cjs"
     },
     "./styles.css": "./dist/styles/markdown.css"
   },
@@ -29,8 +29,8 @@
   ],
   "sideEffects": [
     "dist/styles/markdown.css",
-    "dist/elements/index.js",
-    "dist/elements/index.cjs"
+    "dist/elements.js",
+    "dist/elements.cjs"
   ],
   "scripts": {
     "build": "bun run build:js && bun run build:types && bun run build:css",
