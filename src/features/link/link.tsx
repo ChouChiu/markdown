@@ -9,15 +9,23 @@ export function makeLinkComponent(): Pick<Components, "a"> {
 			children,
 			...props
 		}: React.AnchorHTMLAttributes<HTMLAnchorElement> & ExtraProps) {
-			const cleanProps = stripNode(props);
+			const { rel: existingRel, ...cleanProps } = stripNode(props);
 			const isExternal = href?.startsWith("http");
+
+			let rel: string | undefined;
+			if (isExternal) {
+				const existing = typeof existingRel === "string" ? existingRel : "";
+				const rels = new Set(existing.split(/\s+/).filter(Boolean));
+				rels.add("noopener");
+				rels.add("noreferrer");
+				rel = [...rels].join(" ");
+			}
+
 			return (
 				<a
 					href={href}
-					{...(isExternal
-						? { target: "_blank", rel: "noopener noreferrer" }
-						: {})}
 					{...cleanProps}
+					{...(isExternal ? { target: "_blank", rel } : {})}
 				>
 					{children}
 				</a>

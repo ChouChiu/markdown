@@ -1,77 +1,67 @@
 "use client";
 
-import { Icon } from "@iconify/react";
-import { Check, Copy } from "lucide-react";
-import type { CSSProperties } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import prism from "prismjs";
+import { createElement, useMemo } from "react";
 
-export function CodeBlock({
-	language,
-	codeString,
-	theme,
-}: {
+import "../../elements/copy-code-button";
+import { escapeHtml, resolveLanguage } from "../../shared/prism-utils";
+
+// ---------------------------------------------------------------------------
+// CodeBlock
+// ---------------------------------------------------------------------------
+
+export interface CodeBlockProps {
+	/** Programming language identifier (e.g. "typescript", "python") */
 	language: string;
+	/** Raw source code to highlight */
 	codeString: string;
-	theme: { [key: string]: CSSProperties };
-}) {
-	const [copied, setCopied] = useState(false);
-	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+}
 
-	const handleCopy = useCallback(async () => {
-		try {
-			await navigator.clipboard.writeText(codeString);
-			setCopied(true);
-			if (timerRef.current) clearTimeout(timerRef.current);
-			timerRef.current = setTimeout(() => setCopied(false), 2000);
-		} catch {
-			// Clipboard API unavailable (non-secure context, iframe, etc.)
+/**
+ * Standalone syntax-highlighted code block component.
+ *
+ * Uses Prism for highlighting and a `<copy-code-button>` Custom Element
+ * for the copy-to-clipboard button. No external icon library required.
+ *
+ * For syntax highlighting colors, import a Prism theme CSS:
+ *   import "prismjs/themes/prism-tomorrow.css";
+ *
+ * @example
+ * ```tsx
+ * import { CodeBlock } from "@chouchiu/markdown";
+ * <CodeBlock language="typescript" codeString="const x = 1;" />
+ * ```
+ */
+export function CodeBlock({ language, codeString }: CodeBlockProps) {
+	const highlighted = useMemo(() => {
+		const resolvedLang = resolveLanguage(language);
+		if (resolvedLang) {
+			try {
+				return prism.highlight(
+					codeString,
+					prism.languages[resolvedLang],
+					resolvedLang,
+				);
+			} catch {
+				return escapeHtml(codeString);
+			}
 		}
-	}, [codeString]);
-
-	useEffect(() => {
-		return () => {
-			if (timerRef.current) clearTimeout(timerRef.current);
-		};
-	}, []);
+		return escapeHtml(codeString);
+	}, [language, codeString]);
 
 	return (
 		<div className="markdown-code-block">
 			<div className="markdown-code-header">
-				<div className="flex items-center gap-2">
-					<Icon icon={`devicon:${language}`} className="markdown-code-icon" />
-					<span>{language}</span>
-				</div>
-				<button
-					type="button"
-					onClick={handleCopy}
-					aria-label={copied ? "Copied" : "Copy code"}
-					className="flex items-center gap-1 rounded px-2 py-1 text-xs transition-colors hover:bg-white/10 hover:text-white"
-				>
-					{copied ? (
-						<>
-							<Check className="size-3" />
-							<span>Copied!</span>
-						</>
-					) : (
-						<>
-							<Copy className="size-3" />
-							<span>Copy</span>
-						</>
-					)}
-				</button>
+				<span>{language}</span>
+				{createElement("copy-code-button", { "data-code": codeString })}
 			</div>
-			<SyntaxHighlighter
-				language={language}
-				style={theme}
-				customStyle={{
-					margin: 0,
-					borderRadius: "0 0 var(--cm-radius) var(--cm-radius)",
-					fontSize: "0.875rem",
-				}}
-			>
-				{codeString}
-			</SyntaxHighlighter>
+			<pre style={{ margin: 0 }}>
+				<code
+					className={`language-${language}`}
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: trusted Prism output
+					dangerouslySetInnerHTML={{ __html: highlighted }}
+				/>
+			</pre>
 		</div>
 	);
 }

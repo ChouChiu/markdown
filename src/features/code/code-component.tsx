@@ -8,8 +8,12 @@ import { CodeBlock } from "./code-block";
 /**
  * Returns { code, pre } components for react-markdown.
  * Fenced code blocks get syntax highlighting; inline code stays plain.
+ *
+ * @deprecated Since v2.0, fenced code blocks are handled by the rehype-code-block
+ * plugin. Use `rehypeCodeBlock()` in your rehype pipeline instead.
+ * This factory remains for legacy custom component usage only.
  */
-export function makeCodeComponents(syntaxTheme: {
+export function makeCodeComponents(_syntaxTheme: {
 	[key: string]: CSSProperties;
 }): Pick<Components, "code" | "pre"> {
 	return {
@@ -27,13 +31,7 @@ export function makeCodeComponents(syntaxTheme: {
 			const codeString = String(children).replace(/\n$/, "");
 
 			if (match) {
-				return (
-					<CodeBlock
-						language={language}
-						codeString={codeString}
-						theme={syntaxTheme}
-					/>
-				);
+				return <CodeBlock language={language} codeString={codeString} />;
 			}
 
 			return (

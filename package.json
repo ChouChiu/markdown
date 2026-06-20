@@ -1,7 +1,7 @@
 {
   "name": "@chouchiu/markdown",
-  "version": "1.0.2",
-  "description": "React Markdown renderer — GFM, syntax highlighting, GitHub Alerts, math",
+  "version": "2.0.0",
+  "description": "Framework-agnostic Markdown renderer — GFM, syntax highlighting, GitHub Alerts, math. Ships rehype plugins (Astro, VitePress, unified) + React components.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -12,13 +12,25 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./plugins": {
+      "types": "./dist/plugins/index.d.ts",
+      "import": "./dist/plugins/index.js",
+      "require": "./dist/plugins/index.cjs"
+    },
+    "./elements": {
+      "types": "./dist/elements/index.d.ts",
+      "import": "./dist/elements/index.js",
+      "require": "./dist/elements/index.cjs"
+    },
     "./styles.css": "./dist/styles/markdown.css"
   },
   "files": [
     "dist"
   ],
   "sideEffects": [
-    "dist/styles/markdown.css"
+    "dist/styles/markdown.css",
+    "dist/elements/index.js",
+    "dist/elements/index.cjs"
   ],
   "scripts": {
     "build": "bun run build:js && bun run build:types && bun run build:css",
@@ -38,36 +50,44 @@
   "peerDependenciesMeta": {
     "katex": {
       "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
     }
   },
   "dependencies": {
-    "@iconify/react": "^6.0.2",
-    "lucide-react": "^1.18.0",
+    "prismjs": "^1.30.0",
     "react-markdown": "^10.1.0",
-    "react-syntax-highlighter": "^16.1.1",
     "rehype-github-alerts": "^4.2.0",
     "rehype-katex": "^7.0.1",
     "rehype-raw": "^7.0.0",
     "remark-emoji": "^5.0.2",
     "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@types/react-syntax-highlighter": "^15.5.13",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },
   "keywords": [
     "markdown",
     "react",
+    "astro",
+    "rehype",
+    "remark",
     "gfm",
     "syntax-highlighting",
     "katex",
     "math",
-    "renderer"
+    "renderer",
+    "unified"
   ],
   "license": "MIT",
   "repository": {
